@@ -5,9 +5,12 @@ import storage from "redux-persist/lib/storage";
 import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
 
 import user from "./reducers/userReducer";
+import transaction from "./reducers/transReducer";
+
 //create root reducer
 const reducer = combineReducers({
   user,
+  transaction,
 });
 
 const persistConfig = {

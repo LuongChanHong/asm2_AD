@@ -7,12 +7,18 @@ import Sidebar from "./components/sidebar/Sidebar";
 
 function App() {
   return (
-    <section className="container">
-      <section className="d-flex app__wrapper">
-        <div>
+    <section className="pt-3 app__container">
+      <section className="row d-flex">
+        <div className="col-2 border-secondary border-end border-bottom p-1 text-center fw-bold">
+          <span className="purple-text">Admin Page</span>
+        </div>
+        <div className="col-10 border-secondary border-start border-bottom"></div>
+      </section>
+      <section className="row d-flex">
+        <div className="col-2 border-secondary border-end border-top">
           <Sidebar />
         </div>
-        <div className="flex-grow-1">
+        <div className="col-10 border-secondary border-start border-top">
           <BrowserRouter>
             <Routes>
               <Route exact path="/" element={<Dashboard />} />

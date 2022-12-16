@@ -1,5 +1,5 @@
 import axios from "axios";
-import { serverPath } from "../utils/path";
+import { serverPath } from "../utils/path.js";
 
 export class baseService {
   get = (url, params) => {

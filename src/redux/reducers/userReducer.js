@@ -11,12 +11,6 @@ const initialState = {
     // isAdmin: false,
     // identity: "",
   },
-  searchInfo: {
-    // date: {},
-    // destination: "",
-    // options: {},
-  },
-  foundUser: {},
 };
 
 const reducer = (state = initialState, action) => {
