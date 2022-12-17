@@ -3,7 +3,18 @@ import React from "react";
 import "../../App.css";
 import "./sidebar.css";
 
+import { logOutAction } from "../../redux/actions/userAction";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 const Sidebar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = (event) => {
+    dispatch(logOutAction(() => navigate("login")));
+  };
+
   return (
     <section className="sidebar__container">
       <section className="sidebar__wrapper">
@@ -118,8 +129,8 @@ const Sidebar = () => {
               {/* USER - START */}
               <span>USER</span>
               <ul>
-                <li>
-                  <a className="sidebar_link" href="/">
+                <li onClick={handleLogout}>
+                  <a className="sidebar_link pointer">
                     <svg
                       fill="currentColor"
                       xmlns="http://www.w3.org/2000/svg"

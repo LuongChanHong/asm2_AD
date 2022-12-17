@@ -1,8 +1,16 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import Sidebar from "../sidebar/Sidebar";
 
 const Wrapper = (props) => {
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.user.loginUser);
+  if (!user) {
+    navigate("/login");
+  }
+
   return (
     <section className="pt-3 app__container">
       <section className="row d-flex">

@@ -19,10 +19,7 @@ const reducer = (state = initialState, action) => {
       state.loginUser = action.payload;
       return { ...state };
     case USER_ACTION.LOGOUT:
-      state.loginUser = {};
-      return { ...state };
-    case USER_ACTION.INPUT_SEARCH:
-      state.searchInfo = action.payload;
+      state.loginUser = null;
       return { ...state };
     default:
       return state;
