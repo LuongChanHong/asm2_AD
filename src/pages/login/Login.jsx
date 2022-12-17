@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
+import "../../App.css";
 import "./login.css";
 
-import Navbar from "../../components/navbar/Navbar";
+// import Navbar from "../../components/navbar/Navbar";
 import { logInAction } from "../../redux/actions/userAction";
 
 const Login = () => {
-  const [input, setInput] = useState({
-    email: "user1@mail.com",
-    password: "456",
-  });
-  // const [user, setUser] = useState({});
+  const [input, setInput] = useState({});
+  const [errorText, setErrorText] = useState("");
   const [isLoginError, setLoginError] = useState(false);
 
   const navigate = useNavigate();
@@ -29,16 +27,31 @@ const Login = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(logInAction(input, () => navigate(-1)));
+    setLoginError(false);
+    const response = dispatch(logInAction(input));
+    response.then((res) => {
+      // console.log(res);
+      if (typeof res == "object" && res.response.status == 404) {
+        setLoginError(true);
+        setErrorText(res.response.statusText);
+      }
+      if (typeof res == "boolean") {
+        if (res) {
+          navigate("/");
+        } else {
+          setLoginError(true);
+          setErrorText("This user is not admin");
+        }
+      }
+    });
   };
 
   return (
     <section>
-      <Navbar />
       <section className="login__body">
         <div className="card">
-          <div className="d-flex flex-column card-body">
-            <h1 className="text-center">Login</h1>
+          <div className="d-flex flex-column card-body p-4">
+            <h1 className="text-center login__title">Login</h1>
             <form className="d-grid gap-3">
               <input
                 name="email"
@@ -56,13 +69,11 @@ const Login = () => {
                 onChange={handleChange}
                 value={input.password}
               />
-              {isLoginError && (
-                <span className="text-danger">wrong email or password</span>
-              )}
+              {isLoginError && <span className="text-danger">{errorText}</span>}
               <button
                 onClick={handleSubmit}
                 type="button"
-                className="btn btn-primary"
+                className="rounded login__button"
               >
                 Login
               </button>
