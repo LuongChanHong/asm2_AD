@@ -2,6 +2,16 @@ import { userService } from "../../services/userServices";
 import { USER_ACTION } from "./types/userTypes";
 import { createAction } from ".";
 
+// export const resetHotelData = () => {
+//   return async (dispatch) => {
+//     try {
+//       dispatch(createAction("RESET"));
+//     } catch (error) {
+//       console.log("error:", error);
+//     }
+//   };
+// };
+
 export const logInAction = (loginInfo) => {
   return async (dispatch) => {
     try {

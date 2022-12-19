@@ -6,11 +6,13 @@ import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
 
 import user from "./reducers/userReducer";
 import transaction from "./reducers/transReducer";
+import hotel from "./reducers/hotelReducer";
 
 //create root reducer
 const reducer = combineReducers({
   user,
   transaction,
+  hotel,
 });
 
 const persistConfig = {
