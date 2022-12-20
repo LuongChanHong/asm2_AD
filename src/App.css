@@ -11,6 +11,7 @@
   --gray-x: gray;
   --red-x: rgba(255, 0, 0, 1);
   --red-xx: rgba(255, 0, 0, 0.2);
+  --red-xxx: red;
   --yellow-x: rgba(131, 131, 0, 1);
   --yellow-xx: rgba(163, 163, 0, 0.2);
   --green-x: rgba(0, 128, 0, 1);
@@ -28,6 +29,10 @@
 .purple-text {
   color: var(--purple-x);
   font-size: 1.5rem;
+}
+
+.warning-text {
+  color: var(--red-xxx) !important;
 }
 
 .app__wrapper {
@@ -83,6 +88,10 @@
   background-color: transparent;
   border: none;
   padding: 10px;
+}
+
+.input-warning {
+  background-image: linear-gradient(var(--red-xxx), var(--red-xxx)) !important;
 }
 
 .input-outline-none:focus {
