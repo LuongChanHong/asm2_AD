@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
-import { get } from "../../utils/fetch";
+import { get, post } from "../../utils/fetch";
 
 import Wrapper from "../../components/wrapper/Wrapper";
 
@@ -10,38 +10,71 @@ import "../../App.css";
 import "./addHotel.css";
 
 const AddHotel = () => {
-  const [input, setInput] = useState({
-    name: "",
-    type: "hotel",
-    address: "",
-    city: "Ho Chi Minh",
-    distance: 50,
-    title: "",
-    description: "",
-    price: 100,
-    image: "",
-    featured: "yes",
-    room: [],
+  // const [input, setInput] = useState({
+  //   name: "",
+  //   type: "hotel",
+  //   address: "",
+  //   city: "Ho Chi Minh",
+  //   distance: 50,
+  //   title: "",
+  //   description: "",
+  //   price: 100,
+  //   image: "",
+  //   featured: "yes",
+  //   room: [],
+  // });
+
+  // const [inputValid, setInputValid] = useState({
+  //   name: true,
+  //   address: true,
+  //   distance: true,
+  //   title: true,
+  //   room: true,
+  //   description: true,
+  //   price: true,
+  //   image: true,
+  // });
+  const [name, setName] = useState({ value: "", isValid: true });
+  const [type, setType] = useState({ value: "hotel", isValid: true });
+  const [address, setAddress] = useState({ value: "", isValid: true });
+  const [city, setCity] = useState({ value: "Ho Chi Minh", isValid: true });
+  const [distance, setDistance] = useState({ value: 50, isValid: true });
+  const [title, setTitle] = useState({ value: "", isValid: true });
+  const [description, setDescription] = useState({ value: "", isValid: true });
+  const [price, setPrice] = useState({ value: 100, isValid: true });
+  const [featured, setFeatured] = useState({ value: true, isValid: true });
+  const [image, setImage] = useState({ value: "", isValid: true });
+  const [selectedRoom, setSelectedRoom] = useState({
+    value: [],
+    isValid: true,
   });
-  const [inputValid, setInputValid] = useState({
-    name: true,
-    address: true,
-    distance: true,
-    title: true,
-    room: true,
-    description: true,
-    price: true,
-    image: true,
-  });
+
   const [isInputsValid, setInputsValid] = useState(true);
   const [roomList, setRoomList] = useState([]);
 
   const hotelTypeList = useSelector((state) => state.hotel.types);
   const cityList = useSelector((state) => state.hotel.cities);
   const featureOptions = [
-    { name: "Yes", value: "yes" },
-    { name: "No", value: "no" },
+    { name: "Yes", value: true },
+    { name: "No", value: false },
   ];
+  const inputInfo = {
+    name: { label: "Name", name: "name", type: "text" },
+    address: { label: "Address", name: "address", type: "text" },
+    title: { label: "Title", name: "title", type: "text" },
+    description: { label: "Description", name: "description", type: "text" },
+    city: { label: "City", name: "city" },
+    type: { label: "Type", name: "type" },
+    featured: { label: "Feature", name: "feature" },
+    image: { label: "Image Link", name: "image" },
+    room: { label: "Room List", name: "room" },
+    price: { label: "Price", name: "price", type: "number" },
+    distance: {
+      label: "Distance from city center",
+      name: "distance",
+      type: "number",
+    },
+  };
 
   useEffect(() => {
     const getAllRoom = async () => {
@@ -55,39 +88,188 @@ const AddHotel = () => {
   }, []);
 
   // ===================================================================
+  // HANDLER - START
+  // ===================================================================
+
+  const handleEvent = (event) => {
+    // console.log("event:", event.target);
+    const target = event.target;
+    if (target.type === "checkbox") {
+      return {
+        _name: target.name,
+        value: target.value,
+        type: target.type,
+        checked: target.checked,
+      };
+    } else {
+      return {
+        _name: target.name,
+        value: target.value,
+        type: target.type,
+      };
+    }
+  };
+
+  const handleChange = (event, input) => {
+    const { _name, value, checked, type } = handleEvent(event);
+    // console.log(_name, value);
+    switch (_name) {
+      case "name":
+        setName({ ...name, value: value });
+        break;
+      case "type":
+        setType({ ...type, value: value });
+        break;
+      case "address":
+        setAddress({ ...address, value: value });
+        break;
+      case "city":
+        setCity({ ...city, value: value });
+        break;
+      case "featured":
+        setFeatured({ ...featured, value: value });
+        break;
+      case "distance":
+        setDistance({ ...distance, value: value });
+        break;
+      case "price":
+        setPrice({ ...price, value: value });
+        break;
+      case "title":
+        setTitle({ ...title, value: value });
+        break;
+      case "description":
+        setDescription({ ...description, value: value });
+        break;
+      case "image":
+        setImage({ ...image, value: value });
+        break;
+      case "room":
+        const _selectedRoom = [...selectedRoom.value];
+        const selectedCheckBox = checked
+          ? [..._selectedRoom, value]
+          : _selectedRoom.filter((item) => item != value);
+        setSelectedRoom({
+          ...selectedRoom,
+          value: selectedCheckBox,
+        });
+        break;
+    }
+  };
+
+  const arrayValidation = (value) => {
+    return value.length !== 0 ? true : false;
+  };
+
+  const textValidation = (value) => {
+    return value !== "" ? true : false;
+  };
+  const numberValidation = (value) => {
+    return value == 0 ? false : true;
+  };
+
+  const inputValidation = () => {
+    let isAllValid = true;
+    let isValid;
+    isValid = textValidation(name.value);
+    setName({ ...name, isValid: isValid });
+    isAllValid &= isValid;
+
+    isValid = textValidation(address.value);
+    setAddress({ ...address, isValid: isValid });
+    isAllValid &= isValid;
+
+    isValid = numberValidation(distance.value);
+    setDistance({ ...distance, isValid: isValid });
+    isAllValid &= isValid;
+
+    isValid = textValidation(title.value);
+    setTitle({ ...title, isValid: isValid });
+    isAllValid &= isValid;
+
+    isValid = textValidation(description.value);
+    setDescription({ ...description, isValid: isValid });
+    isAllValid &= isValid;
+
+    isValid = numberValidation(price.value);
+    setPrice({ ...price, isValid: isValid });
+    isAllValid &= isValid;
+
+    isValid = textValidation(image.value);
+    setImage({ ...image, isValid: isValid });
+    isAllValid &= isValid;
+
+    isValid = arrayValidation(selectedRoom.value);
+    setSelectedRoom({ ...selectedRoom, isValid: isValid });
+    isAllValid &= isValid;
+
+    setInputsValid(isAllValid);
+  };
+
+  const handleAddHotel = async (event) => {
+    event.preventDefault();
+    inputValidation();
+    console.log("isInputsValid:", isInputsValid);
+    // if (isInputsValid != 0) {
+    //   await post("/add-new-hotel", input);
+    // }
+    const _input = {
+      name: name,
+      address: address,
+      type: type,
+      city: city,
+      featured: featured,
+      distance: distance,
+      price: price,
+      title: title,
+      description: description,
+      image: image,
+      selectedRoom: selectedRoom,
+    };
+
+    console.log(_input);
+  };
+
+  // ===================================================================
+  // HANDLER - END
+  // ===================================================================
+
+  // ===================================================================
   // RENDER - START
   // ===================================================================
 
-  const renderCharInput = (label, name, value) => {
-    const type = typeof value === "string" ? "text" : "number";
-    // console.log(inputValid[name]);
+  const renderCharInput = (inputInfo, input) => {
     return (
       <div className="addHotel__form--item align-items-center">
-        <span className={`${inputValid[name] ? `` : `warning-text`}`}>
-          {label}:
+        <span className={`${input.isValid ? `` : `warning-text`}`}>
+          {inputInfo.label}:
         </span>
         <input
           className={`addHotel__form--input ${
-            inputValid[name] ? `` : `input-warning`
+            input.isValid ? `` : `input-warning`
           } input-underline input-outline-none`}
-          type={type}
-          name={name}
-          value={value}
-          onChange={handleChange}
+          type={inputInfo.type}
+          name={inputInfo.name}
+          value={input.value}
+          onChange={(e) => handleChange(e)}
         />
       </div>
     );
   };
 
-  const renderTextArea = (label, name, value) => {
+  const renderTextArea = (inputInfo, input) => {
     return (
       <div className="addHotel__form--item w-100 align-items-center">
-        <p className={`${inputValid.image ? `` : `warning-text`}`}>{label}:</p>
+        <p className={`${input.isValid ? `` : `warning-text`}`}>
+          {inputInfo.label}:
+        </p>
         <textarea
-          className="w-100 input-outline-none"
-          name={name}
-          value={value}
-          onChange={handleChange}
+          className={`${
+            input.isValid ? `` : `textArea-warning`
+          } w-100 input-outline-none`}
+          name={inputInfo.name}
+          value={input.value}
+          onChange={(e) => handleChange(e, input)}
           rows="4"
           // cols="50"
         ></textarea>
@@ -95,15 +277,15 @@ const AddHotel = () => {
     );
   };
 
-  const renderOptionInput = (label, name, optionList) => {
+  const renderOptionInput = (inputInfo, optionList) => {
     return (
       <div className="addHotel__form--item">
-        <span>{label}:</span>
+        <span>{inputInfo.label}:</span>
         <select
           selected={optionList[0].value}
-          className="addHotel__form--select input-outline-none w-100 mt-2"
-          name={name}
-          onChange={handleChange}
+          className={`addHotel__form--select input-outline-none w-100 mt-2`}
+          name={inputInfo.name}
+          onChange={(e) => handleChange(e)}
         >
           {optionList.map((option, i) => (
             <option key={i} value={option.value}>
@@ -119,92 +301,6 @@ const AddHotel = () => {
   // RENDER - END
   // ===================================================================
 
-  // ===================================================================
-  // HANDLER - START
-  // ===================================================================
-
-  const handleEvent = (event) => {
-    // console.log("event:", event.target);
-    const target = event.target;
-    if (target.type === "checkbox") {
-      return {
-        name: target.name,
-        value: target.value,
-        type: target.type,
-        checked: target.checked,
-      };
-    } else {
-      return {
-        name: target.name,
-        value: target.value,
-        type: target.type,
-      };
-    }
-  };
-
-  const handleChange = (event) => {
-    const { name, value, checked, type } = handleEvent(event);
-
-    if (type === "checkbox") {
-      const selectedCheckBox = checked
-        ? [...input[name], value]
-        : input[name].filter((item) => item != value);
-      setInput({
-        ...input,
-        [name]: selectedCheckBox,
-      });
-    } else {
-      setInput({ ...input, [name]: value });
-    }
-
-    console.log("input:", input);
-  };
-
-  const arrayValidation = (name, value) => {
-    const isValid = value.length !== 0 ? true : false;
-    setInputValid({ ...inputValid, [name]: isValid });
-    return isValid;
-  };
-
-  const textValidation = (name, value) => {
-    const isValid = value !== "" ? true : false;
-    setInputValid({ ...inputValid, [name]: isValid });
-    return isValid;
-  };
-
-  const numberValidation = (name, value) => {
-    const isValid = value !== 0 ? true : false;
-    setInputValid({ ...inputValid, [name]: isValid });
-    return isValid;
-  };
-
-  const inputValidation = () => {
-    let isAllValid = true;
-    for (const attri in input) {
-      if (typeof input[attri] === "string") {
-        isAllValid &= textValidation(attri, input[attri]);
-      }
-      if (typeof input[attri] === "number") {
-        isAllValid &= numberValidation(attri, input[attri]);
-      }
-      if (typeof input[attri] === "object") {
-        isAllValid &= arrayValidation(attri, input[attri]);
-      }
-    }
-    setInputsValid(isAllValid);
-  };
-
-  const handleAddHotel = (event) => {
-    event.preventDefault();
-
-    inputValidation();
-    console.log(inputValid);
-  };
-
-  // ===================================================================
-  // HANDLER - END
-  // ===================================================================
-
   return (
     <Wrapper>
       <section className="addHotel__container py-3">
@@ -215,50 +311,51 @@ const AddHotel = () => {
               <form action="">
                 <div className="row">
                   <div className="col-md-12 col-lg-6">
-                    {renderCharInput("Name", "name", input.name)}
-                    {renderCharInput("Address", "address", input.address)}
+                    {/* name input */}
+                    {renderCharInput(inputInfo.name, name)}
+                    {/* address input */}
+                    {renderCharInput(inputInfo.address, address)}
                     <div className="row">
+                      {/* type input */}
                       <div className="col-md-12 col-lg-4 py-md-2">
-                        {renderOptionInput("Type", "type", hotelTypeList)}
+                        {renderOptionInput(inputInfo.type, hotelTypeList)}
                       </div>
+                      {/* city input */}
                       <div className="col-md-12 col-lg-4 py-md-2">
-                        {renderOptionInput("City", "city", cityList)}
+                        {renderOptionInput(inputInfo.city, cityList)}
                       </div>
+                      {/* featured input */}
                       <div className="col-md-12 col-lg-4 py-md-2">
-                        {renderOptionInput(
-                          "Feature",
-                          "feature",
-                          featureOptions
-                        )}
+                        {renderOptionInput(inputInfo.featured, featureOptions)}
                       </div>
                     </div>
 
                     <div className="row">
                       <div className="col-md-12 col-lg-6">
-                        {renderCharInput(
-                          "Distance from city center",
-                          "distance",
-                          input.distance
-                        )}
+                        {/* distance input */}
+                        {renderCharInput(inputInfo.distance, distance)}
                       </div>
+                      {/* price input */}
                       <div className="col-md-12 col-lg-6">
-                        {renderCharInput("Price", "price", input.price)}
+                        {renderCharInput(inputInfo.price, price)}
                       </div>
                     </div>
-                    {renderCharInput("Title", "title", input.title)}
-                    {renderCharInput(
-                      "Desciption",
-                      "description",
-                      input.description
-                    )}
-                    {renderTextArea("Image Link", "image", input.image)}
+                    {/* title input */}
+                    {renderCharInput(inputInfo.title, title)}
+                    {/* description input */}
+                    {renderCharInput(inputInfo.description, description)}
+                    {/* image input */}
+                    {renderTextArea(inputInfo.image, image)}
                   </div>
 
                   <div className="col-md-12 col-lg-6">
+                    {/* room input */}
                     <span
-                      className={`${inputValid.room ? `` : `warning-text`}`}
+                      className={`${
+                        selectedRoom.isValid ? `` : `warning-text`
+                      }`}
                     >
-                      Room List
+                      {inputInfo.room.label}
                     </span>
                     <Table striped>
                       <thead>
@@ -282,7 +379,7 @@ const AddHotel = () => {
                                 type="checkbox"
                                 name="room"
                                 value={room._id}
-                                onChange={handleChange}
+                                onChange={(e) => handleChange(e)}
                               ></input>
                             </td>
                           </tr>

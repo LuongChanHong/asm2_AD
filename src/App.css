@@ -94,6 +94,10 @@
   background-image: linear-gradient(var(--red-xxx), var(--red-xxx)) !important;
 }
 
+.textArea-warning {
+  border-color: var(--red-xxx) !important;
+}
+
 .input-outline-none:focus {
   outline: none;
 }
