@@ -20,6 +20,10 @@
   --purple-xx: rgba(128, 0, 128, 0.2);
 }
 
+.hidden {
+  display: none !important;
+}
+
 .app__container {
   max-width: 1300px;
   margin: 0 auto;

@@ -5,26 +5,35 @@ import { useNavigate } from "react-router-dom";
 import { get, post } from "../../utils/fetch";
 
 import Wrapper from "../../components/wrapper/Wrapper";
+import NotificationBox from "../../components/notificationBox/NotificationBox";
 
 import "../../App.css";
 import "./hotelList.css";
 
 const HotelList = () => {
   const [hotelList, setHotelList] = useState([]);
+  const [deleteHotel, setDeleteHotel] = useState({});
+  const [isNotiBoxOpen, setNotiBoxOpen] = useState(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const getAllHotel = async () => {
       const allHotel = await get("/get-all-hotel");
-      console.log(allHotel.data);
+      // console.log(allHotel.data);
       setHotelList(allHotel.data);
     };
     getAllHotel();
-  }, []);
+  }, [hotelList]);
 
-  const deleteHotel = async (id) => {
-    await post("/delete-hotel", { id: id });
+  const handleOpenModal = () => {
+    setNotiBoxOpen(!isNotiBoxOpen);
+  };
+
+  const handleDeleteHotel = async (item) => {
+    // await post("/delete-hotel", { id: item._id });
+    setDeleteHotel(item);
+    setNotiBoxOpen(true);
   };
 
   const renderHotelItem = (item, index) => {
@@ -38,7 +47,7 @@ const HotelList = () => {
         <td>{item.city}</td>
         <td>
           <button
-            onClick={() => deleteHotel(item._id)}
+            onClick={() => handleDeleteHotel(item)}
             className="hotelList__button--delete button button--red"
           >
             Delete
@@ -84,7 +93,16 @@ const HotelList = () => {
                 )}
               </tbody>
             </Table>
-            <section className="hotelList__Noti"></section>
+            {isNotiBoxOpen ? (
+              <NotificationBox
+                hotel={deleteHotel}
+                isOpen={isNotiBoxOpen}
+                handleOpenModal={handleOpenModal}
+                api={"/delete-hotel"}
+              />
+            ) : (
+              <></>
+            )}
           </div>
         </section>
       </section>
