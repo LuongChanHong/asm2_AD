@@ -2,30 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-import { get } from "../../utils/fetch";
+import { get, post } from "../../utils/fetch";
 
 import Wrapper from "../../components/wrapper/Wrapper";
 
 import "../../App.css";
 import "./hotelList.css";
-
-const renderHotelItem = (item, index) => {
-  return (
-    <tr key={index}>
-      <td>{++index}</td>
-      <td>{item._id}</td>
-      <td>{item.name}</td>
-      <td>{item.type}</td>
-      <td>{item.title}</td>
-      <td>{item.city}</td>
-      <td>
-        <button className="hotelList__button--delete button button--red">
-          Delete
-        </button>
-      </td>
-    </tr>
-  );
-};
 
 const HotelList = () => {
   const [hotelList, setHotelList] = useState([]);
@@ -41,11 +23,36 @@ const HotelList = () => {
     getAllHotel();
   }, []);
 
+  const deleteHotel = async (id) => {
+    await post("/delete-hotel", { id: id });
+  };
+
+  const renderHotelItem = (item, index) => {
+    return (
+      <tr key={index}>
+        <td>{++index}</td>
+        <td>{item._id}</td>
+        <td>{item.name}</td>
+        <td>{item.type}</td>
+        <td>{item.title}</td>
+        <td>{item.city}</td>
+        <td>
+          <button
+            onClick={() => deleteHotel(item._id)}
+            className="hotelList__button--delete button button--red"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    );
+  };
+
   return (
     <Wrapper>
       <section className="hotelList__container py-3">
         <section className="hotelList__wrapper">
-          <div className="table_wrapper shadow p-4 bg-white rounded">
+          <div className="table_wrapper position-relative shadow p-4 bg-white rounded">
             <div className="d-flex justify-content-between">
               <h3>Hotel List</h3>
               <button
@@ -77,6 +84,7 @@ const HotelList = () => {
                 )}
               </tbody>
             </Table>
+            <section className="hotelList__Noti"></section>
           </div>
         </section>
       </section>

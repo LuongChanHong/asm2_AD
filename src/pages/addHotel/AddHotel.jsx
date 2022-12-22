@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import { get, post } from "../../utils/fetch";
 
@@ -51,6 +52,8 @@ const AddHotel = () => {
 
   const [isInputsValid, setInputsValid] = useState(true);
   const [roomList, setRoomList] = useState([]);
+
+  const navigate = useNavigate();
 
   const hotelTypeList = useSelector((state) => state.hotel.types);
   const cityList = useSelector((state) => state.hotel.cities);
@@ -171,37 +174,39 @@ const AddHotel = () => {
   const inputValidation = () => {
     let isAllValid = true;
     let isValid;
+
     isValid = textValidation(name.value);
+
     setName({ ...name, isValid: isValid });
-    isAllValid &= isValid;
+    isAllValid = isAllValid && isValid;
 
     isValid = textValidation(address.value);
     setAddress({ ...address, isValid: isValid });
-    isAllValid &= isValid;
+    isAllValid = isAllValid && isValid;
 
     isValid = numberValidation(distance.value);
     setDistance({ ...distance, isValid: isValid });
-    isAllValid &= isValid;
+    isAllValid = isAllValid && isValid;
 
     isValid = textValidation(title.value);
     setTitle({ ...title, isValid: isValid });
-    isAllValid &= isValid;
+    isAllValid = isAllValid && isValid;
 
     isValid = textValidation(description.value);
     setDescription({ ...description, isValid: isValid });
-    isAllValid &= isValid;
+    isAllValid = isAllValid && isValid;
 
     isValid = numberValidation(price.value);
     setPrice({ ...price, isValid: isValid });
-    isAllValid &= isValid;
+    isAllValid = isAllValid && isValid;
 
     isValid = textValidation(image.value);
     setImage({ ...image, isValid: isValid });
-    isAllValid &= isValid;
+    isAllValid = isAllValid && isValid;
 
     isValid = arrayValidation(selectedRoom.value);
     setSelectedRoom({ ...selectedRoom, isValid: isValid });
-    isAllValid &= isValid;
+    isAllValid = isAllValid && isValid;
 
     setInputsValid(isAllValid);
   };
@@ -209,25 +214,25 @@ const AddHotel = () => {
   const handleAddHotel = async (event) => {
     event.preventDefault();
     inputValidation();
-    console.log("isInputsValid:", isInputsValid);
-    // if (isInputsValid != 0) {
-    //   await post("/add-new-hotel", input);
-    // }
     const _input = {
-      name: name,
-      address: address,
-      type: type,
-      city: city,
-      featured: featured,
-      distance: distance,
-      price: price,
-      title: title,
-      description: description,
-      image: image,
-      selectedRoom: selectedRoom,
+      name: name.value,
+      address: address.value,
+      type: type.value,
+      city: city.value,
+      featured: featured.value,
+      distance: distance.value,
+      price: price.value,
+      title: title.value,
+      description: description.value,
+      image: image.value,
+      selectedRoom: selectedRoom.value,
     };
+    if (isInputsValid) {
+      await post("/add-new-hotel", _input);
+      navigate("/hotels");
+    }
 
-    console.log(_input);
+    // console.log(_input);
   };
 
   // ===================================================================
