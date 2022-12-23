@@ -7,6 +7,7 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import Login from "./pages/login/Login";
 import HotelList from "./pages/hotelList/HotelList";
 import AddHotel from "./pages/addHotel/AddHotel";
+import RoomList from "./pages/roomList/RoomList";
 
 function App() {
   return (
@@ -15,6 +16,8 @@ function App() {
         <Route exact path="/" element={<Dashboard />} />
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/hotels" element={<HotelList />} />
+        <Route exact path="/rooms" element={<RoomList />} />
+
         <Route exact path="/add-hotel" element={<AddHotel />} />
         <Route path="*" element={<h1>NOT FOUND PAGE</h1>} />
       </Routes>

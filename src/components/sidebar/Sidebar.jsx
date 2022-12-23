@@ -68,7 +68,7 @@ const Sidebar = () => {
                   </a>
                 </li>
                 <li>
-                  <a className="sidebar_link" href="/">
+                  <a className="sidebar_link" href="/rooms">
                     <svg
                       fill="currentColor"
                       xmlns="http://www.w3.org/2000/svg"

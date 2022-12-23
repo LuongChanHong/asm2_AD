@@ -5,26 +5,26 @@ import { useNavigate } from "react-router-dom";
 import { get, post } from "../../utils/fetch";
 
 import Wrapper from "../../components/wrapper/Wrapper";
-import NotificationBox from "../../components/notificationBox/NotificationBox";
+// import NotificationBox from "../../components/notificationBox/NotificationBox";
 
 import "../../App.css";
-import "./hotelList.css";
+import "./roomList.css";
 
-const HotelList = () => {
-  const [hotelList, setHotelList] = useState([]);
-  const [deleteHotel, setDeleteHotel] = useState({});
+const RoomList = () => {
+  const [roomList, setRoomList] = useState([]);
+  const [deleteRoom, setDeleteRoom] = useState({});
   const [isNotiBoxOpen, setNotiBoxOpen] = useState(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const getAllHotel = async () => {
-      const allHotel = await get("/get-all-hotel");
-      // console.log(allHotel.data);
-      setHotelList(allHotel.data);
+    const getAllRoom = async () => {
+      const allRoom = await get("/get-all-room");
+      // console.log(allRoom.data);
+      setRoomList(allRoom.data);
     };
-    getAllHotel();
-  }, [hotelList]);
+    getAllRoom();
+  }, [roomList]);
 
   const handleOpenModal = () => {
     setNotiBoxOpen(!isNotiBoxOpen);
@@ -41,13 +41,13 @@ const HotelList = () => {
       <tr key={index}>
         <td>{++index}</td>
         <td>{item._id}</td>
-        <td>{item.name}</td>
-        <td>{item.type}</td>
         <td>{item.title}</td>
-        <td>{item.city}</td>
+        <td className="roomList__table--desc">{item.desc}</td>
+        <td>{item.price}</td>
+        <td className="text-center">{item.maxPeople}</td>
         <td>
           <button
-            onClick={() => handleDeleteHotel(item)}
+            // onClick={() => handleDeleteHotel(item)}
             className="button--delete button button--red"
           >
             Delete
@@ -59,16 +59,16 @@ const HotelList = () => {
 
   return (
     <Wrapper>
-      <section className="hotelList__container py-3">
-        <section className="hotelList__wrapper">
+      <section className="roomList__container py-3">
+        <section className="roomList__wrapper">
           <div className="table_wrapper position-relative shadow p-4 bg-white rounded">
             <div className="d-flex justify-content-between">
-              <h3>Hotel List</h3>
+              <h3>Room List</h3>
               <button
                 onClick={() => navigate("/add-hotel")}
                 className="button--add button button--green"
               >
-                Add new hotel
+                Add new room
               </button>
             </div>
             <Table striped>
@@ -76,24 +76,24 @@ const HotelList = () => {
                 <tr>
                   <th>#</th>
                   <th>ID</th>
-                  <th>Name</th>
-                  <th>Type</th>
                   <th>Title</th>
-                  <th>City</th>
+                  <th>Description</th>
+                  <th>Price</th>
+                  <th>Max People</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
-                {hotelList.length > 0 ? (
-                  hotelList.map((hotel, i) => renderHotelItem(hotel, i))
+                {roomList.length > 0 ? (
+                  roomList.map((hotel, i) => renderHotelItem(hotel, i))
                 ) : (
                   <tr>
-                    <td colSpan={7}>No hotel found</td>
+                    <td colSpan={7}>No room found</td>
                   </tr>
                 )}
               </tbody>
             </Table>
-            {isNotiBoxOpen ? (
+            {/* {isNotiBoxOpen ? (
               <NotificationBox
                 hotel={deleteHotel}
                 isOpen={isNotiBoxOpen}
@@ -102,7 +102,7 @@ const HotelList = () => {
               />
             ) : (
               <></>
-            )}
+            )} */}
           </div>
         </section>
       </section>
@@ -110,4 +110,4 @@ const HotelList = () => {
   );
 };
 
-export default HotelList;
+export default RoomList;
