@@ -11,6 +11,7 @@ const initialState = {
     { name: "Hà Nội", value: "Ha Noi" },
     { name: "Đà Nẵng", value: "Da Nang" },
   ],
+  hotels: [],
 };
 
 const reducer = (state = initialState, action) => {

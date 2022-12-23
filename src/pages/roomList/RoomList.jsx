@@ -32,7 +32,7 @@ const RoomList = () => {
 
   const handleDeleteHotel = async (item) => {
     // await post("/delete-hotel", { id: item._id });
-    setDeleteHotel(item);
+    setDeleteRoom(item);
     setNotiBoxOpen(true);
   };
 
@@ -65,7 +65,7 @@ const RoomList = () => {
             <div className="d-flex justify-content-between">
               <h3>Room List</h3>
               <button
-                onClick={() => navigate("/add-hotel")}
+                onClick={() => navigate("/add-room")}
                 className="button--add button button--green"
               >
                 Add new room

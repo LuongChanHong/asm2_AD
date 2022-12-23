@@ -161,11 +161,11 @@ const AddHotel = () => {
   };
 
   const arrayValidation = (value) => {
-    return value.length !== 0 ? true : false;
+    return value.length == 0 ? false : true;
   };
 
   const textValidation = (value) => {
-    return value !== "" ? true : false;
+    return value == "" ? false : true;
   };
   const numberValidation = (value) => {
     return value == 0 ? false : true;
@@ -176,7 +176,6 @@ const AddHotel = () => {
     let isValid;
 
     isValid = textValidation(name.value);
-
     setName({ ...name, isValid: isValid });
     isAllValid = isAllValid && isValid;
 
@@ -207,29 +206,37 @@ const AddHotel = () => {
     isValid = arrayValidation(selectedRoom.value);
     setSelectedRoom({ ...selectedRoom, isValid: isValid });
     isAllValid = isAllValid && isValid;
-
+    // console.log("isAllValid:", isAllValid);
     setInputsValid(isAllValid);
+    // return isAllValid;
   };
 
   const handleAddHotel = async (event) => {
     event.preventDefault();
+    // const is = inputValidation();
+    // console.log("is:", is);
     inputValidation();
+
     const _input = {
-      name: name.value,
-      address: address.value,
-      type: type.value,
-      city: city.value,
-      featured: featured.value,
-      distance: distance.value,
-      price: price.value,
-      title: title.value,
-      description: description.value,
-      image: image.value,
-      selectedRoom: selectedRoom.value,
+      name: name,
+      address: address,
+      type: type,
+      city: city,
+      featured: featured,
+      distance: distance,
+      price: price,
+      title: title,
+      description: description,
+      image: image,
+      selectedRoom: selectedRoom,
     };
-    if (isInputsValid) {
+
+    if (isInputsValid == true) {
       await post("/add-new-hotel", _input);
       navigate("/hotels");
+      console.log("isInputsValid:", isInputsValid);
+    } else {
+      console.log("isInputsValid:", isInputsValid);
     }
 
     // console.log(_input);
