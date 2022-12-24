@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import { Button } from "react-bootstrap";
 
@@ -10,11 +10,35 @@ import "./notificationBox.css";
 const NotificationBox = (props) => {
   const [isModalOpen, setModalOpen] = useState(props.isOpen);
   const [resText, setResText] = useState("");
+  const [renderData, setData] = useState({ name: "", detail: "", id: "" });
+
   // console.log("props.hotel:", props.hotel);
   // console.log("isModalOpen:", isModalOpen);
+  useEffect(() => {
+    const setRenderData = () => {
+      switch (props.page) {
+        case "hotelList":
+          setData({
+            name: props.hotel.name,
+            detail: props.hotel.type,
+            id: props.hotel._id,
+          });
+          break;
+        case "roomList":
+          console.log(props.room);
+          setData({
+            name: props.room.title,
+            detail: "room",
+            id: props.room._id,
+          });
+          break;
+      }
+    };
+    setRenderData();
+  }, []);
 
   const handleDelete = async () => {
-    const response = await post(props.api, { id: props.hotel._id });
+    const response = await post(props.api, { id: renderData.id });
     if (response.data !== "") {
       setResText(response.data);
     } else {
@@ -37,7 +61,7 @@ const NotificationBox = (props) => {
           <Modal.Body>
             <h4>
               {resText === ""
-                ? `Delete ${props.hotel.name} ${props.hotel.type} `
+                ? `Delete ${renderData.name} ${renderData.detail} ?`
                 : `${resText}`}
             </h4>
           </Modal.Body>

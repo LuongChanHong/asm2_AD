@@ -98,6 +98,7 @@ const HotelList = () => {
                 hotel={deleteHotel}
                 isOpen={isNotiBoxOpen}
                 handleOpenModal={handleOpenModal}
+                page={"hotelList"}
                 api={"/delete-hotel"}
               />
             ) : (

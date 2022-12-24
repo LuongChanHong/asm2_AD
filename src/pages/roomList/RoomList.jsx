@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { get, post } from "../../utils/fetch";
 
 import Wrapper from "../../components/wrapper/Wrapper";
-// import NotificationBox from "../../components/notificationBox/NotificationBox";
+import NotificationBox from "../../components/notificationBox/NotificationBox";
 
 import "../../App.css";
 import "./roomList.css";
@@ -30,7 +30,7 @@ const RoomList = () => {
     setNotiBoxOpen(!isNotiBoxOpen);
   };
 
-  const handleDeleteHotel = async (item) => {
+  const handleDeleteRoom = async (item) => {
     // await post("/delete-hotel", { id: item._id });
     setDeleteRoom(item);
     setNotiBoxOpen(true);
@@ -47,7 +47,7 @@ const RoomList = () => {
         <td className="text-center">{item.maxPeople}</td>
         <td>
           <button
-            // onClick={() => handleDeleteHotel(item)}
+            onClick={() => handleDeleteRoom(item)}
             className="button--delete button button--red"
           >
             Delete
@@ -93,16 +93,17 @@ const RoomList = () => {
                 )}
               </tbody>
             </Table>
-            {/* {isNotiBoxOpen ? (
+            {isNotiBoxOpen ? (
               <NotificationBox
-                hotel={deleteHotel}
+                room={deleteRoom}
                 isOpen={isNotiBoxOpen}
                 handleOpenModal={handleOpenModal}
-                api={"/delete-hotel"}
+                page={"roomList"}
+                api={"/delete-room"}
               />
             ) : (
               <></>
-            )} */}
+            )}
           </div>
         </section>
       </section>
