@@ -61,7 +61,7 @@ const Dashboard = () => {
 
   const getRenderData = async (url, callback) => {
     const response = await get(url);
-    // console.log("response:", response);
+    console.log("response:", response);
     callback(response.data);
   };
 

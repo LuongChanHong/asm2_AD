@@ -80,7 +80,7 @@ const Sidebar = () => {
                   </a>
                 </li>
                 <li>
-                  <a className="sidebar_link" href="/">
+                  <a className="sidebar_link" href="/transactions">
                     <svg
                       fill="currentColor"
                       xmlns="http://www.w3.org/2000/svg"
@@ -99,7 +99,7 @@ const Sidebar = () => {
               <span>NEWS</span>
               <ul>
                 <li>
-                  <a className="sidebar_link" href="/">
+                  <a className="sidebar_link" href="/add-hotel">
                     <svg
                       fill="currentColor"
                       xmlns="http://www.w3.org/2000/svg"
@@ -111,7 +111,7 @@ const Sidebar = () => {
                   </a>
                 </li>
                 <li>
-                  <a className="sidebar_link" href="/">
+                  <a className="sidebar_link" href="/add-room">
                     <svg
                       fill="currentColor"
                       xmlns="http://www.w3.org/2000/svg"
