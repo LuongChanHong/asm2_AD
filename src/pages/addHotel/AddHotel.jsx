@@ -50,7 +50,7 @@ const AddHotel = () => {
     isValid: true,
   });
 
-  const [isInputsValid, setInputsValid] = useState(true);
+  const [isWarnOn, setWarnOn] = useState(true);
   const [roomList, setRoomList] = useState([]);
 
   const navigate = useNavigate();
@@ -180,6 +180,7 @@ const AddHotel = () => {
     isAllValid = isAllValid && isValid;
 
     isValid = textValidation(address.value);
+
     setAddress({ ...address, isValid: isValid });
     isAllValid = isAllValid && isValid;
 
@@ -206,40 +207,34 @@ const AddHotel = () => {
     isValid = arrayValidation(selectedRoom.value);
     setSelectedRoom({ ...selectedRoom, isValid: isValid });
     isAllValid = isAllValid && isValid;
-    // console.log("isAllValid:", isAllValid);
-    setInputsValid(isAllValid);
-    // return isAllValid;
+
+    // console.log("valid isAllValid:", isAllValid);
+    return isAllValid;
   };
 
   const handleAddHotel = async (event) => {
     event.preventDefault();
-    // const is = inputValidation();
-    // console.log("is:", is);
-    inputValidation();
+    const valid = inputValidation();
+    setWarnOn(valid);
 
     const _input = {
-      name: name,
-      address: address,
-      type: type,
-      city: city,
-      featured: featured,
-      distance: distance,
-      price: price,
-      title: title,
-      description: description,
-      image: image,
-      selectedRoom: selectedRoom,
+      name: name.value,
+      address: address.value,
+      type: type.value,
+      city: city.value,
+      featured: featured.value,
+      distance: distance.value,
+      price: price.value,
+      title: title.value,
+      description: description.value,
+      image: image.value,
+      selectedRoom: selectedRoom.value,
     };
 
-    if (isInputsValid == true) {
+    if (valid) {
       await post("/add-new-hotel", _input);
       navigate("/hotels");
-      console.log("isInputsValid:", isInputsValid);
-    } else {
-      console.log("isInputsValid:", isInputsValid);
     }
-
-    // console.log(_input);
   };
 
   // ===================================================================
@@ -406,10 +401,10 @@ const AddHotel = () => {
                     <button
                       onClick={handleAddHotel}
                       className={`addHotel__button button ${
-                        isInputsValid ? `button--green` : `button--red`
+                        isWarnOn ? `button--green` : `button--red`
                       } `}
                     >
-                      {isInputsValid ? "Send" : "Some Input Invalid"}
+                      {isWarnOn ? "Send" : "Some Input Invalid"}
                     </button>
                   </div>
                 </div>
