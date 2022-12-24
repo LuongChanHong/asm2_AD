@@ -22,7 +22,7 @@ const AddRoom = () => {
   });
 
   const [hotelList, setHotelList] = useState([]);
-  const [isInputsValid, setInputsValid] = useState(true);
+  const [isWarnOn, setWarnOn] = useState(true);
 
   const navigate = useNavigate();
   const specialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
@@ -103,21 +103,29 @@ const AddRoom = () => {
     if (value === "") {
       return false;
     }
-    if (space.test(value)) {
-      _value = value.split(" ");
-    }
-    if (specialChar.test(value)) {
-      _value = value.split(specialChar);
-    }
+    if (space.test(value) || specialChar.test(value)) {
+      if (space.test(value)) {
+        _value = value.split(" ");
+      }
+      if (specialChar.test(value)) {
+        _value = value.split(specialChar);
+      }
 
-    _value = _value
-      .map((item) => Number.isNaN(parseInt(item)))
-      .find((item) => item == true);
+      _value = _value
+        .map((item) => Number.isNaN(parseInt(item)))
+        .find((item) => item == true);
 
-    if (_value) {
-      return false;
+      if (_value) {
+        return false;
+      } else {
+        return true;
+      }
     } else {
-      return true;
+      if (parseInt(value)) {
+        return true;
+      } else {
+        return false;
+      }
     }
   };
   const blankValidation = (value) => {
@@ -155,12 +163,13 @@ const AddRoom = () => {
     setRooms({ ...rooms, isValid: isValid });
     isAllValid = isAllValid && isValid;
 
-    setInputsValid(isAllValid);
+    setWarnOn(isAllValid);
+    return isAllValid;
   };
 
   const handleAddRoom = async (event) => {
     event.preventDefault();
-    inputValidation();
+    const valid = inputValidation();
 
     const _input = {
       rooms: rooms.value.split(" ").map((item) => parseInt(item)),
@@ -170,12 +179,11 @@ const AddRoom = () => {
       title: title.value,
       description: description.value,
     };
-    // if (isInputsValid) {
-    //   await post("/add-new-hotel", _input);
-    //   navigate("/hotels");
-    // }
-
-    console.log(_input);
+    // console.log(_input);
+    if (valid) {
+      await post("/add-new-room", _input);
+      navigate("/rooms");
+    }
   };
 
   // ===================================================================
@@ -291,10 +299,10 @@ const AddRoom = () => {
                     <button
                       onClick={handleAddRoom}
                       className={`addHotel__button button ${
-                        isInputsValid ? `button--green` : `button--red`
+                        isWarnOn ? `button--green` : `button--red`
                       } `}
                     >
-                      {isInputsValid ? "Send" : "Some Input Invalid"}
+                      {isWarnOn ? "Send" : "Some Input Invalid"}
                     </button>
                   </div>
                 </div>
